@@ -1,0 +1,16 @@
+{
+    "name": "feedple/laravel-example",
+    "type": "project",
+    "description": "Feedple SDK & Web Widget Integration Example for Laravel",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "feedple/feedple-sdk": "^0.1.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

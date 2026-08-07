@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+*.egg-info/
+.dist/
+build/
+dist/
+
+# PHP
+vendor/
+composer.lock
+
+# Environment & Local Secrets
+.env
+*.local
+*.log
+
+# Databases & SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Frameworks & Cache
+.pytest_cache/
+.coverage
+htmlcov/
+.idea/
+.vscode/
+*.swp
+.DS_Store

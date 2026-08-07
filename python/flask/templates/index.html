@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flask + Feedple AI Integration</title>
+  <style>
+    :root {
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --accent: #10b981;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+      --border: #30363d;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-color);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(22, 27, 34, 0.8);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    main {
+      flex: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Flask Integration Example</h1>
+    <span style="color: var(--accent); font-weight: 600;">Feedple SDK Active</span>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Welcome to Flask + Feedple AI</h2>
+      <p>This Flask application synchronizes <code>customers</code> and <code>invoices</code> table schemas using the Feedple SDK in a non-blocking thread upon server startup.</p>
+      <p>Click the chat icon on the bottom right to start querying your database with Feedple AI.</p>
+    </div>
+  </main>
+
+  <!-- Feedple AI Web Widget -->
+  <script
+    src="https://feedple-ai-psi.vercel.app/widget.js"
+    data-public-key="{{ widget_public_key }}"
+    data-theme-color="#10b981"
+    data-position="bottom-right"
+    data-title="Flask Support Assistant"
+    data-welcome-message="Hi there! Ask me anything about your Flask customers and invoices."
+    defer
+  ></script>
+</body>
+</html>

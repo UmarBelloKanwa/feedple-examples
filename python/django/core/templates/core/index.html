@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Django + Feedple AI Integration</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --accent: #8b5cf6;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(17, 24, 39, 0.8);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Django 5 Integration Example</h1>
+    <span style="color: var(--accent); font-weight: 600;">Feedple AppConfig Connected</span>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Django + Feedple AI Integration</h2>
+      <p>This Django project initializes the Feedple SDK inside <code>core/apps.py</code> when Django boots up. It synchronizes the <code>organizations</code> and <code>tickets</code> tables securely.</p>
+      <p>Use the floating chat widget on the bottom right to query your Django database using natural language.</p>
+    </div>
+  </main>
+
+  <!-- Feedple AI Web Widget Integration -->
+  <script
+    src="https://feedple-ai-psi.vercel.app/widget.js"
+    data-public-key="{{ widget_public_key }}"
+    data-theme-color="#8b5cf6"
+    data-position="bottom-right"
+    data-title="Django AI Assistant"
+    data-welcome-message="Hello! I am connected to your Django database. How can I help you today?"
+    defer
+  ></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FastAPI + Feedple AI Integration</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --accent: #6366f1;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-color);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(8px);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    header .badge {
+      background: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      box-sizing: border-box;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .hero h2 {
+      font-size: 2.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    code {
+      background: #1e293b;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FastAPI Integration <span class="badge">Python SDK</span></h1>
+    <nav style="color: var(--text-muted); font-size: 0.9rem;">
+      Status: <span style="color: #10b981; font-weight: 600;">SDK WebSocket Active</span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h2>Feedple AI + FastAPI Starter</h2>
+      <p>Your database schema is synchronized automatically over background WebSockets. Use the floating chat widget on the bottom right to ask questions about your products and users.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>1. Database Sync</h3>
+        <p>The <code>FeedpleSDK</code> background worker handles zero-exposure schema synchronization and executes AI queries safely via SQLAlchemy.</p>
+      </div>
+
+      <div class="card">
+        <h3>2. Web Widget</h3>
+        <p>The embedded widget connects seamlessly to Feedple AI without revealing internal backend endpoints or database credentials.</p>
+      </div>
+
+      <div class="card">
+        <h3>3. Allowed Tables</h3>
+        <p>Configured with identity table permissions for <code>users</code>, <code>products</code>, and <code>orders</code>.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Feedple AI Web Widget Integration -->
+  <script
+    src="https://feedple-ai-psi.vercel.app/widget.js"
+    data-public-key="{{ widget_public_key }}"
+    data-theme-color="#6366f1"
+    data-position="bottom-right"
+    data-title="FastAPI Feedple Assistant"
+    data-welcome-message="Hello! I am connected to your FastAPI database. How can I help you today?"
+    defer
+  ></script>
+</body>
+</html>
