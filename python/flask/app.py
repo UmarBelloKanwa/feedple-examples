@@ -20,24 +20,26 @@ WIDGET_PUBLIC_KEY = os.getenv("FEEDPLE_WIDGET_PUBLIC_KEY", "wpk_demo_public_key"
 # 1. Initialize Database
 init_db()
 
-# 2. Initialize Feedple SDK
-logger.info("Initializing Feedple SDK for Flask...")
-identity = Identity(
-    name="flask-app",
-    allowed_tables=["customers", "invoices"]
-)
-
-try:
-    sdk = FeedpleSDK(
-        api_key=FEEDPLE_API_KEY,
-        db=engine,
-        identity=identity,
-        auto_sync=True
+# 2. Initialize Feedple SDK (only run in main worker process when reloader is active)
+sdk = None
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not app.debug:
+    logger.info("Initializing Feedple SDK for Flask...")
+    identity = Identity(
+        name="flask-app",
+        allowed_tables=["customers", "invoices"]
     )
-    logger.info("Feedple SDK started in background thread.")
-except Exception as e:
-    logger.error(f"Failed to start Feedple SDK: {e}")
-    sdk = None
+
+    try:
+        sdk = FeedpleSDK(
+            api_key=FEEDPLE_API_KEY,
+            db=engine,
+            identity=identity,
+            auto_sync=True
+        )
+        logger.info("Feedple SDK started in background thread.")
+    except Exception as e:
+        logger.error(f"Failed to start Feedple SDK: {e}")
+        sdk = None
 
 # Ensure clean shutdown of background thread when Flask exits
 def shutdown_sdk():

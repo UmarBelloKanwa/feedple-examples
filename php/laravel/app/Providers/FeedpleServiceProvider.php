@@ -29,7 +29,21 @@ class FeedpleServiceProvider
                     password: env('DB_PASSWORD', '')
                 );
             } else {
+                $dbDir = database_path();
+                if (!is_dir($dbDir)) {
+                    mkdir($dbDir, 0777, true);
+                }
                 $dbPath = database_path('database.sqlite');
+                if (!file_exists($dbPath)) {
+                    touch($dbPath);
+                    $pdo = new \PDO('sqlite:' . $dbPath);
+                    $pdo->exec("
+                        CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT);
+                        CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, total REAL);
+                        INSERT OR IGNORE INTO users (name, email) VALUES ('Taylor Otwell', 'taylor@laravel.com');
+                        INSERT OR IGNORE INTO orders (user_id, total) VALUES (1, 299.00);
+                    ");
+                }
                 $dbConfig = DbConfig::sqlite(path: $dbPath);
             }
 

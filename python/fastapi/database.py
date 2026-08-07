@@ -60,5 +60,13 @@ def init_db():
             ]
             db.add_all(sample_users)
             db.commit()
+
+        if db.query(Order).count() == 0:
+            sample_orders = [
+                Order(user_id=1, product_id=1, quantity=1, total_amount=49.99, status="completed"),
+                Order(user_id=2, product_id=2, quantity=2, total_amount=398.00, status="completed"),
+            ]
+            db.add_all(sample_orders)
+            db.commit()
     finally:
         db.close()

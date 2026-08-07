@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require_once __DIR__ . '/vendor/autoload.php';
+}
 
 use Dotenv\Dotenv;
 use Feedple\Sdk\FeedpleSDK;
@@ -8,13 +10,13 @@ use Feedple\Sdk\DbConfig;
 use Feedple\Sdk\Core\Identity;
 
 // Load environment variables if .env exists
-if (file_exists(__DIR__ . '/.env')) {
+if (file_exists(__DIR__ . '/.env') && class_exists(Dotenv::class)) {
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 }
 
-$apiKey = $_ENV['FEEDPLE_API_KEY'] ?? 'sk_live_demo_key';
-$widgetPublicKey = $_ENV['FEEDPLE_WIDGET_PUBLIC_KEY'] ?? 'wpk_demo_public_key';
+$apiKey = $_ENV['FEEDPLE_API_KEY'] ?? $_SERVER['FEEDPLE_API_KEY'] ?? 'sk_live_demo_key';
+$widgetPublicKey = $_ENV['FEEDPLE_WIDGET_PUBLIC_KEY'] ?? $_SERVER['FEEDPLE_WIDGET_PUBLIC_KEY'] ?? 'wpk_demo_public_key';
 $dbPath = __DIR__ . '/database.sqlite';
 
 // 1. Initialize SQLite Database if missing
@@ -41,7 +43,7 @@ if (!file_exists($dbPath)) {
 
 // 2. Initialize Feedple SDK
 $sdkActive = false;
-if ($apiKey && $apiKey !== 'sk_live_demo_key') {
+if (class_exists(FeedpleSDK::class) && $apiKey && $apiKey !== 'sk_live_demo_key') {
     try {
         $dbConfig = DbConfig::sqlite(path: $dbPath);
         $identity = new Identity(

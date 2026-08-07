@@ -40,5 +40,13 @@ def init_db():
             ]
             db.add_all(customers)
             db.commit()
+
+        if db.query(Invoice).count() == 0:
+            invoices = [
+                Invoice(customer_id=1, amount=1200.00, status="paid"),
+                Invoice(customer_id=2, amount=450.00, status="pending"),
+            ]
+            db.add_all(invoices)
+            db.commit()
     finally:
         db.close()

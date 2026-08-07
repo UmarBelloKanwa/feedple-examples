@@ -29,6 +29,7 @@ feedple-examples/
 │   └── django/        # Django 5 + AppConfig + Feedple SDK + Web Widget
 ├── php/
 │   ├── laravel/       # Laravel + FeedpleServiceProvider + Web Widget
+│   ├── symfony/       # Symfony + FeedpleService + Web Widget
 │   └── pure-php/      # Pure PHP + PDO + Feedple SDK + Web Widget
 ├── README.md
 └── LICENSE
@@ -101,7 +102,17 @@ php artisan serve
 ```
 *Access dashboard at `http://localhost:8000`.*
 
-#### 5. Pure PHP Example (`php/pure-php/`)
+#### 5. Symfony Example (`php/symfony/`)
+
+```bash
+cd php/symfony
+composer install
+cp .env.example .env  # Update FEEDPLE_API_KEY & FEEDPLE_WIDGET_PUBLIC_KEY
+php -S localhost:8000 -t public
+```
+*Access dashboard at `http://localhost:8000`.*
+
+#### 6. Pure PHP Example (`php/pure-php/`)
 
 ```bash
 cd php/pure-php

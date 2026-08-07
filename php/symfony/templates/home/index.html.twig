@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symfony + Feedple AI Integration</title>
+    <style>
+        :root {
+            --bg: #090d16;
+            --card-bg: #161b22;
+            --accent: #06b6d4;
+            --text: #f0f6fc;
+            --text-muted: #8b949e;
+            --border: #30363d;
+        }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(22, 27, 34, 0.8);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Symfony Integration Example</h1>
+        <span style="color: var(--accent); font-weight: 600;">
+            Status: {{ sdk_active ? 'FeedpleService Active' : 'Demo Mode' }}
+        </span>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Symfony + Feedple AI Starter</h2>
+            <p>The <code>App\Service\FeedpleService</code> handles zero-exposure database schema synchronization (`clients` and `projects`) using <code>feedple/feedple-sdk</code>.</p>
+            <p>Click the chat bubble on the bottom right to start querying your Symfony application data using Feedple AI.</p>
+        </div>
+    </main>
+
+    <!-- Feedple AI Web Widget Integration -->
+    <script
+        src="https://feedple-ai-psi.vercel.app/widget.js"
+        data-public-key="{{ widget_public_key }}"
+        data-theme-color="#06b6d4"
+        data-position="bottom-right"
+        data-title="Symfony AI Assistant"
+        data-welcome-message="Hello! I am connected to your Symfony database. How can I assist you today?"
+        defer
+    ></script>
+</body>
+</html>
