@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "feedple/feedple-sdk": "^0.1.0",
+        "feedple/feedple-sdk": "^1.0.0",
         "vlucas/phpdotenv": "^5.5"
     },
     "autoload": {
