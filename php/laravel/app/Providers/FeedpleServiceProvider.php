@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\ServiceProvider;
 use Feedple\Sdk\FeedpleSDK;
 use Feedple\Sdk\DbConfig;
 use Feedple\Sdk\Core\Identity;
 
-class FeedpleServiceProvider
+class FeedpleServiceProvider extends ServiceProvider
 {
     protected ?FeedpleSDK $sdk = null;
 
@@ -19,6 +20,7 @@ class FeedpleServiceProvider
         }
 
         try {
+            // 1. Database Connection Configuration (matches .env)
             $dbDriver = env('DB_CONNECTION', 'sqlite');
 
             if ($dbDriver === 'mysql') {
@@ -26,40 +28,38 @@ class FeedpleServiceProvider
                     host: env('DB_HOST', '127.0.0.1'),
                     database: env('DB_DATABASE', 'laravel'),
                     username: env('DB_USERNAME', 'root'),
-                    password: env('DB_PASSWORD', '')
+                    password: env('DB_PASSWORD', ''),
+                    port: (int) env('DB_PORT', 3306)
+                );
+            } elseif ($dbDriver === 'pgsql' || $dbDriver === 'postgres') {
+                $dbConfig = DbConfig::pgsql(
+                    host: env('DB_HOST', '127.0.0.1'),
+                    database: env('DB_DATABASE', 'postgres'),
+                    username: env('DB_USERNAME', 'postgres'),
+                    password: env('DB_PASSWORD', ''),
+                    port: (int) env('DB_PORT', 5432)
                 );
             } else {
-                $dbDir = database_path();
-                if (!is_dir($dbDir)) {
-                    mkdir($dbDir, 0777, true);
-                }
-                $dbPath = database_path('database.sqlite');
-                if (!file_exists($dbPath)) {
-                    touch($dbPath);
-                    $pdo = new \PDO('sqlite:' . $dbPath);
-                    $pdo->exec("
-                        CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT);
-                        CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, total REAL);
-                        INSERT OR IGNORE INTO users (name, email) VALUES ('Taylor Otwell', 'taylor@laravel.com');
-                        INSERT OR IGNORE INTO orders (user_id, total) VALUES (1, 299.00);
-                    ");
+                $dbPath = env('DB_DATABASE', database_path('database.sqlite'));
+                if (!str_starts_with($dbPath, '/')) {
+                    $dbPath = base_path($dbPath);
                 }
                 $dbConfig = DbConfig::sqlite(path: $dbPath);
             }
 
             $identity = new Identity(
                 name: 'laravel-app',
-                allowedTables: ['users', 'orders', 'products', 'subscriptions']
+                allowedTables: ['users', 'orders', 'products']
             );
 
             $this->sdk = new FeedpleSDK(
                 apiKey: $apiKey,
                 dbConfig: $dbConfig,
-                identity: $identity,
-                autoSync: true
+                identity: $identity
             );
         } catch (\Throwable $e) {
             error_log("Failed to initialize Feedple SDK in Laravel: " . $e->getMessage());
         }
     }
 }
+
