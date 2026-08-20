@@ -128,7 +128,7 @@ php -S localhost:8000
 
 - [Feedple Python SDK Documentation (PyPI)](https://pypi.org/project/feedple-sdk/)
 - [Feedple PHP SDK Documentation (Packagist)](https://packagist.org/packages/feedple/feedple-sdk)
-- [Feedple Web Widget Integration Guide](https://feedple-ai-psi.vercel.app/docs/widget)
+- [Feedple Web Widget Integration Guide](https://feedple.com/docs/widget)
 
 ---
 

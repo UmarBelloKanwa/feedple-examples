@@ -134,7 +134,7 @@ if (class_exists(FeedpleSDK::class) && $apiKey && $apiKey !== 'sk_live_demo_key'
 
     <!-- Feedple AI Web Widget Integration -->
     <script
-        src="https://feedple-ai-psi.vercel.app/widget.js"
+        src="https://feedple.com/widget.js"
         data-public-key="<?= htmlspecialchars($widgetPublicKey) ?>"
         data-theme-color="#0284c7"
         data-position="bottom-right"

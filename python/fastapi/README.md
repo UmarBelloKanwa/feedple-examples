@@ -8,7 +8,7 @@ This directory contains a complete, production-ready **FastAPI** application dem
 
 - **FastAPI Lifespan Management**: Automatically starts `FeedpleSDK` in a non-blocking background thread on startup and stops it cleanly on shutdown.
 - **SQLAlchemy Integration**: Syncs database tables (`users`, `products`, `orders`) securely with Feedple AI.
-- **Embedded Web Widget**: Renders a floating AI chat widget in HTML using `https://feedple-ai-psi.vercel.app/widget.js`.
+- **Embedded Web Widget**: Renders a floating AI chat widget in HTML using `https://feedple.com/widget.js`.
 - **Health Check Endpoint**: Includes `/api/health` monitoring.
 
 ---

@@ -66,7 +66,7 @@
 
     <!-- Feedple AI Web Widget Integration -->
     <script
-        src="https://feedple-ai-psi.vercel.app/widget.js"
+        src="https://feedple.com/widget.js"
         data-public-key="{{ env('FEEDPLE_WIDGET_PUBLIC_KEY', 'wpk_demo_key') }}"
         data-theme-color="#f43f5e"
         data-position="bottom-right"
