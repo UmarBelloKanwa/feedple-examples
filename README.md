@@ -12,8 +12,8 @@ Official reference repository containing production-quality, runnable starter ap
 
 Feedple AI allows you to query your database using natural language without exposing database ports or credentials.
 
-- **Feedple SDK**: Synchronizes database schemas over outbound WebSockets and executes AI queries safely on your server.
-- **Feedple AI Web Widget**: Embeds a sleek, Shadow-DOM encapsulated AI assistant directly into your frontend with a single script tag.
+- **Feedple SDK**: Synchronizes database schemas over a secure background connection and executes AI queries safely on your server.
+- **Feedple AI Web Widget**: Embeds a sleek, self-contained AI assistant directly into your frontend with a single script tag.
 
 This repository provides complete, runnable starter projects across popular Python and PHP web frameworks.
 
