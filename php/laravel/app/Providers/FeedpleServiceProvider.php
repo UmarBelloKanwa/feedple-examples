@@ -49,7 +49,12 @@ class FeedpleServiceProvider extends ServiceProvider
 
             $identity = new Identity(
                 name: 'laravel-app',
-                allowedTables: ['users', 'orders', 'products']
+                allowedTables: [
+                    'user', # or users, depends of the table name
+                    'orders', 
+                    'products'
+                ],
+                #all_tables: true, # if you want to allow all db tables
             );
 
             $this->sdk = new FeedpleSDK(
