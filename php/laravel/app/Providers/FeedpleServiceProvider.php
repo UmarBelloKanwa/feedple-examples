@@ -54,7 +54,7 @@ class FeedpleServiceProvider extends ServiceProvider
                     'orders', 
                     'products'
                 ],
-                #all_tables: true, # if you want to allow all db tables
+                //all_tables: true, # if you want to allow all db tables
             );
 
             $this->sdk = new FeedpleSDK(
