@@ -50,7 +50,7 @@ class FeedpleServiceProvider extends ServiceProvider
             $identity = new Identity(
                 name: 'laravel-app',
                 allowedTables: [
-                    'users', # or users, depends of the table name
+                    'users', # or user, depends of the table name
                     'orders', 
                     'products'
                 ],
