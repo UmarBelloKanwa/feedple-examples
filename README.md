@@ -1,6 +1,7 @@
 # Feedple Integration Examples
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript SDK](https://img.shields.io/npm/v/feedple-sdk.svg?color=blue&label=feedple-sdk)](https://www.npmjs.com/package/feedple-sdk)
 [![Python SDK](https://img.shields.io/pypi/v/feedple-sdk.svg?color=green&label=feedple-sdk)](https://pypi.org/project/feedple-sdk/)
 [![PHP SDK](https://img.shields.io/packagist/v/feedple/feedple-sdk.svg?color=purple&label=feedple/feedple-sdk)](https://packagist.org/packages/feedple/feedple-sdk)
 
@@ -15,7 +16,7 @@ Feedple AI allows you to query your database using natural language without expo
 - **Feedple SDK**: Synchronizes database schemas over a secure background connection and executes AI queries safely on your server.
 - **Feedple AI Web Widget**: Embeds a sleek, self-contained AI assistant directly into your frontend with a single script tag.
 
-This repository provides complete, runnable starter projects across popular Python and PHP web frameworks.
+This repository provides complete, runnable starter projects across popular TypeScript, Python, and PHP web frameworks.
 
 ---
 
@@ -23,6 +24,10 @@ This repository provides complete, runnable starter projects across popular Pyth
 
 ```text
 feedple-examples/
+├── typescript/
+│   ├── express/       # Express.js + Feedple SDK + Web Widget
+│   ├── nestjs/        # NestJS + FeedpleService + Web Widget
+│   └── nextjs/        # Next.js 14 App Router + Feedple SDK + Web Widget
 ├── python/
 │   ├── fastapi/       # FastAPI + SQLAlchemy + Feedple SDK + Web Widget
 │   ├── flask/         # Flask + SQLAlchemy + Feedple SDK + Web Widget
@@ -45,6 +50,7 @@ Before running any example, ensure you have:
    - Workspace API Key (`sk_live_...`) from your Feedple workspace dashboard.
    - Widget Public Key (`wpk_...`) from your Web Widget settings card.
 2. **Framework Runtime**:
+   - TypeScript examples require **Node.js 18.0+** and **npm**.
    - Python examples require **Python 3.9+**.
    - PHP examples require **PHP 8.1+** and **Composer**.
 
@@ -52,9 +58,43 @@ Before running any example, ensure you have:
 
 ## ⚡ Quick Start by Framework
 
+### 🔷 TypeScript / Node.js Frameworks
+
+#### 1. Express.js Example (`typescript/express/`)
+
+```bash
+cd typescript/express
+npm install
+cp .env.example .env  # Update FEEDPLE_API_KEY & FEEDPLE_WIDGET_PUBLIC_KEY
+npm run dev
+```
+*Access dashboard at `http://localhost:3000`.*
+
+#### 2. NestJS Example (`typescript/nestjs/`)
+
+```bash
+cd typescript/nestjs
+npm install
+cp .env.example .env  # Update FEEDPLE_API_KEY & FEEDPLE_WIDGET_PUBLIC_KEY
+npm start
+```
+*Access dashboard at `http://localhost:3000`.*
+
+#### 3. Next.js App Router Example (`typescript/nextjs/`)
+
+```bash
+cd typescript/nextjs
+npm install
+cp .env.example .env  # Update FEEDPLE_API_KEY & NEXT_PUBLIC_FEEDPLE_WIDGET_KEY
+npm run dev
+```
+*Access dashboard at `http://localhost:3000`.*
+
+---
+
 ### 🐍 Python Frameworks
 
-#### 1. FastAPI Example (`python/fastapi/`)
+#### 4. FastAPI Example (`python/fastapi/`)
 
 ```bash
 cd python/fastapi
@@ -65,7 +105,7 @@ uvicorn main:app --reload --port 8000
 ```
 *Access dashboard at `http://localhost:8000`.*
 
-#### 2. Flask Example (`python/flask/`)
+#### 5. Flask Example (`python/flask/`)
 
 ```bash
 cd python/flask
@@ -76,7 +116,7 @@ python app.py
 ```
 *Access dashboard at `http://localhost:5000`.*
 
-#### 3. Django Example (`python/django/`)
+#### 6. Django Example (`python/django/`)
 
 ```bash
 cd python/django
@@ -92,7 +132,7 @@ python manage.py runserver 8000
 
 ### 🐘 PHP Frameworks
 
-#### 4. Laravel Example (`php/laravel/`)
+#### 7. Laravel Example (`php/laravel/`)
 
 ```bash
 cd php/laravel
@@ -102,7 +142,7 @@ php artisan serve
 ```
 *Access dashboard at `http://localhost:8000`.*
 
-#### 5. Symfony Example (`php/symfony/`)
+#### 8. Symfony Example (`php/symfony/`)
 
 ```bash
 cd php/symfony
@@ -112,7 +152,7 @@ php -S localhost:8000 -t public
 ```
 *Access dashboard at `http://localhost:8000`.*
 
-#### 6. Pure PHP Example (`php/pure-php/`)
+#### 9. Pure PHP Example (`php/pure-php/`)
 
 ```bash
 cd php/pure-php
@@ -126,6 +166,7 @@ php -S localhost:8000
 
 ## 🔗 Documentation Links
 
+- [Feedple TypeScript SDK Documentation (npm)](https://www.npmjs.com/package/feedple-sdk)
 - [Feedple Python SDK Documentation (PyPI)](https://pypi.org/project/feedple-sdk/)
 - [Feedple PHP SDK Documentation (Packagist)](https://packagist.org/packages/feedple/feedple-sdk)
 - [Feedple Web Widget Integration Guide](https://feedple.com/docs/widget)

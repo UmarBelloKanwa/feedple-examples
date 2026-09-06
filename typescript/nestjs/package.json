@@ -1,0 +1,25 @@
+{
+  "name": "feedple-example-nestjs",
+  "version": "1.0.0",
+  "description": "Feedple TypeScript SDK NestJS integration example",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/core": "^10.3.0",
+    "@nestjs/platform-express": "^10.3.0",
+    "better-sqlite3": "^11.1.0",
+    "dotenv": "^16.4.5",
+    "feedple-sdk": "^1.0.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
