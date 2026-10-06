@@ -72,6 +72,26 @@ class FeedpleServiceProvider extends ServiceProvider
 
         // Initialize SDK on web application start
         try {
+            $tempDir = sys_get_temp_dir();
+            $pidFile = $tempDir . '/feedple-sdk.pid';
+            $lockFile = $tempDir . '/feedple-sdk.lock';
+            if (is_file($lockFile) && is_file($pidFile)) {
+                $pid = (int) trim((string) @file_get_contents($pidFile));
+                if ($pid > 0) {
+                    $isRunning = false;
+                    if (PHP_OS_FAMILY === 'Windows') {
+                        $out = shell_exec(sprintf('tasklist /FI "PID eq %d" 2>NUL', $pid));
+                        $isRunning = $out !== null && str_contains($out, (string) $pid);
+                    } else {
+                        exec(sprintf('kill -0 %d 2>/dev/null', $pid), result_code: $exitCode);
+                        $isRunning = ($exitCode === 0);
+                    }
+                    if ($isRunning) {
+                        return;
+                    }
+                }
+            }
+
             static::makeSdk();
         } catch (\Throwable $e) {
             error_log("Failed to initialize Feedple SDK in Laravel: " . $e->getMessage());
