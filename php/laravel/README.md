@@ -34,4 +34,15 @@ FEEDPLE_WIDGET_PUBLIC_KEY=wpk_your_actual_widget_public_key
 php artisan serve
 ```
 
+You can run feedple sdk independent of the sever
+
+```bash
+php artisan feedple:start --tail
+```
+
+Stop the SDK process
+
+```bash
+php artisan feedple:stop
+```
 Access `http://localhost:8000` in your web browser.
