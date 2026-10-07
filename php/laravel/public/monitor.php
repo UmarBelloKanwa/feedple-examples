@@ -14,6 +14,8 @@ header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');
 
+@ini_set('memory_limit', '256M');
+
 $baseDir = dirname(__DIR__);
 $autoloadFile = $baseDir . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 $bootstrapFile = $baseDir . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'app.php';
@@ -47,6 +49,46 @@ function getFeedpleEnv(string $key, ?string $default = null): ?string {
         }
     }
     return getenv($key) ?: $default;
+}
+
+/**
+ * Memory-safe log reader using fseek() to read only the last N lines from the end of the file.
+ * Prevents Out-Of-Memory crashes even if the log file has grown to tens or hundreds of megabytes.
+ */
+function tailFileSafely(string $filePath, int $lines = 100): array {
+    if (!is_file($filePath) || !is_readable($filePath)) {
+        return [];
+    }
+
+    $fp = @fopen($filePath, 'rb');
+    if (!$fp) {
+        return [];
+    }
+
+    $buffer = '';
+    $chunkSize = 4096;
+    fseek($fp, 0, SEEK_END);
+    $pos = ftell($fp);
+    $lineCount = 0;
+
+    while ($pos > 0 && $lineCount <= $lines) {
+        $seek = max(0, $pos - $chunkSize);
+        $readLength = $pos - $seek;
+        fseek($fp, $seek);
+        $chunk = fread($fp, $readLength);
+        $buffer = $chunk . $buffer;
+        $pos = $seek;
+        $lineCount = substr_count($buffer, "\n");
+    }
+
+    fclose($fp);
+
+    $allLines = explode("\n", str_replace(["\r\n", "\r"], "\n", $buffer));
+    if (end($allLines) === '') {
+        array_pop($allLines);
+    }
+
+    return array_map('trim', array_slice($allLines, -$lines));
 }
 
 $apiKey = getFeedpleEnv('FEEDPLE_API_KEY', '');
@@ -190,8 +232,7 @@ if (isset($_GET['api'])) {
         $lines = max(10, min(500, (int) ($_GET['lines'] ?? 100)));
         $content = [];
         if (is_file($logFile)) {
-            $all = file($logFile) ?: [];
-            $content = array_map('trim', array_slice($all, -$lines));
+            $content = tailFileSafely($logFile, $lines);
         }
         echo json_encode([
             'success' => true,
