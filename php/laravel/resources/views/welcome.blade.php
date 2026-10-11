@@ -65,9 +65,15 @@
     </main>
 
     <!-- Feedple AI Web Widget Integration -->
+    @php
+        $rawApiUrl = env('FEEDPLE_API_BASE_URL', 'https://feedple.com');
+        $backendUrl = preg_replace('#/api(/v1)?/?$#', '', $rawApiUrl);
+        $widgetSrc = $backendUrl . '/widget.js';
+    @endphp
     <script
-        src="https://feedple.com/widget.js"
+        src="{{ $widgetSrc }}"
         data-public-key="{{ env('FEEDPLE_WIDGET_PUBLIC_KEY', 'wpk_demo_key') }}"
+        data-backend-url="{{ $backendUrl }}"
         data-theme-color="#f43f5e"
         data-position="bottom-right"
         data-title="Laravel AI Assistant"

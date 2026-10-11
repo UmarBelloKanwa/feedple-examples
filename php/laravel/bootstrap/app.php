@@ -13,7 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         App\Providers\FeedpleServiceProvider::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->validateCsrfTokens(except: [
+            'api/feedple/*',
+            'api/feedple/bridge',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
