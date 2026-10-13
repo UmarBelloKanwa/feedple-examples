@@ -66,7 +66,7 @@
 
     <!-- Feedple AI Web Widget Integration -->
     @php
-        $rawApiUrl = env('FEEDPLE_API_BASE_URL', 'https://feedple.com');
+        $rawApiUrl = config('feedple.api_base_url') ?? \Feedple\Sdk\FeedpleSDK::getApiBaseUrl();
         $backendUrl = preg_replace('#/api(/v1)?/?$#', '', $rawApiUrl);
         $widgetSrc = $backendUrl . '/widget.js';
     @endphp

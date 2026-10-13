@@ -1,5 +1,7 @@
 <?php
 
+use Feedple\Sdk\FeedpleSDK;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -30,8 +32,10 @@ return [
     | 'webhook'   - Stateless HTTP bridge endpoint (default for shared hosting & serverless).
     | 'websocket' - Persistent WebSocket background worker daemon.
     |
+    | Defaults directly from FeedpleSDK::DEFAULT_TRANSPORT ('webhook').
+    |
     */
-    'transport' => env('FEEDPLE_TRANSPORT', 'webhook'),
+    'transport' => env('FEEDPLE_TRANSPORT', FeedpleSDK::DEFAULT_TRANSPORT),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,18 +43,21 @@ return [
     |--------------------------------------------------------------------------
     |
     | The relative URI path where Feedple Cloud sends signed IR query requests.
+    | Defaults directly from FeedpleSDK::DEFAULT_BRIDGE_PATH ('/api/feedple/bridge').
     |
     */
-    'bridge_path' => env('FEEDPLE_BRIDGE_PATH', '/api/feedple/bridge'),
+    'bridge_path' => env('FEEDPLE_BRIDGE_PATH', FeedpleSDK::DEFAULT_BRIDGE_PATH),
 
     /*
     |--------------------------------------------------------------------------
     | API Base URL
     |--------------------------------------------------------------------------
     |
-    | Feedple Cloud REST API base URL for one-shot schema synchronization.
+    | Feedple REST API base URL for one-shot schema synchronization.
+    | Defaults dynamically from FeedpleSDK::getApiBaseUrl() (local when FEEDPLE_DEV_ENV=true,
+    | otherwise production Cloud Run).
     |
     */
-    'api_base_url' => env('FEEDPLE_API_BASE_URL', env('FEEDPLE_API_URL', 'https://feedple-ai-614817435356.us-central1.run.app/api/v1')),
+    'api_base_url' => env('FEEDPLE_API_BASE_URL', FeedpleSDK::getApiBaseUrl()),
 ];
 

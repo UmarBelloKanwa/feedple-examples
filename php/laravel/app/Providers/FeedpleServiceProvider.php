@@ -88,7 +88,7 @@ class FeedpleServiceProvider extends ServiceProvider
 
         $selectedTransport = $transport
             ?? config('feedple.transport')
-            ?? env('FEEDPLE_TRANSPORT', 'webhook');
+            ?? env('FEEDPLE_TRANSPORT', FeedpleSDK::DEFAULT_TRANSPORT);
 
         return static::$cachedSdk = new FeedpleSDK(
             apiKey: $apiKey,
@@ -102,7 +102,7 @@ class FeedpleServiceProvider extends ServiceProvider
     {
         // 1. Auto-register the autonomous HTTP bridge endpoint
         $bridgePath = config('feedple.bridge_path')
-            ?? env('FEEDPLE_BRIDGE_PATH', '/api/feedple/bridge');
+            ?? env('FEEDPLE_BRIDGE_PATH', FeedpleSDK::DEFAULT_BRIDGE_PATH);
 
         Route::post($bridgePath, function (Request $request) {
             $t0 = microtime(true);
@@ -143,7 +143,7 @@ class FeedpleServiceProvider extends ServiceProvider
             return response()->json([
                 'status'     => 'active',
                 'service'    => 'Feedple Webhook Bridge',
-                'transport'  => config('feedple.transport') ?? env('FEEDPLE_TRANSPORT', 'webhook'),
+                'transport'  => config('feedple.transport') ?? env('FEEDPLE_TRANSPORT', FeedpleSDK::DEFAULT_TRANSPORT),
                 'configured' => $configured,
                 'secret_set' => $secretSet,
             ]);
@@ -196,7 +196,18 @@ class FeedpleSyncCommand extends Command
                 $appUrl = config('app.url') ?? env('APP_URL', '');
                 $bridgePath = config('feedple.bridge_path') ?? env('FEEDPLE_BRIDGE_PATH', '/api/feedple/bridge');
                 if (!empty($appUrl) && filter_var($appUrl, FILTER_VALIDATE_URL)) {
-                    $bridgeUrl = rtrim((string) $appUrl, '/') . '/' . ltrim((string) $bridgePath, '/');
+                    $isLocalApp = str_contains((string) $appUrl, '127.0.0.1') || str_contains((string) $appUrl, 'localhost');
+                    $isRemoteApi = !str_contains((string) $apiBaseUrl, '127.0.0.1') && !str_contains((string) $apiBaseUrl, 'localhost');
+
+                    if ($isLocalApp && $isRemoteApi) {
+                        $this->warn('Notice: APP_URL is local (' . $appUrl . ') and cannot receive webhooks from Feedple Cloud.');
+                        $this->line('  → Syncing schema without registering local webhook URL.');
+                        $this->line('  → To test webhooks locally: use an HTTPS tunnel (e.g. ngrok: php artisan feedple:sync --bridge-url=https://xyz.ngrok-free.app/api/feedple/bridge)');
+                        $this->line('  → Or switch transport to WebSocket: FEEDPLE_TRANSPORT=websocket & php artisan feedple:start');
+                        $bridgeUrl = null;
+                    } else {
+                        $bridgeUrl = rtrim((string) $appUrl, '/') . '/' . ltrim((string) $bridgePath, '/');
+                    }
                 }
             }
 
