@@ -405,7 +405,11 @@ class FeedpleStatusCommand extends Command
         if ($isRunning && $pid) {
             $this->info("Worker Status: RUNNING (PID: {$pid})");
         } else {
-            $this->line("Worker Status: STOPPED (not required in webhook mode)");
+            if ($transport === 'webhook') {
+                $this->line("Worker Status: STOPPED (not required in webhook mode)");
+            } else {
+                $this->warn("Worker Status: STOPPED (Start it with: php artisan feedple:start)");
+            }
         }
 
         $this->line("<comment>Log File:</comment> {$logFile}");
