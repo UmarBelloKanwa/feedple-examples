@@ -29,13 +29,15 @@ return [
     | Transport Mode
     |--------------------------------------------------------------------------
     |
-    | 'webhook'   - Stateless HTTP bridge endpoint (default for shared hosting & serverless).
-    | 'websocket' - Persistent WebSocket background worker daemon.
+    | 'webhook'   - Stateless HTTP bridge endpoint (default in production).
+    | 'websocket' - Persistent WebSocket background worker daemon (default in development).
     |
-    | Defaults directly from FeedpleSDK::DEFAULT_TRANSPORT ('webhook').
+    | Defaults dynamically via FeedpleSDK::getDefaultTransport():
+    |  - Development: 'websocket'
+    |  - Production:  'webhook'
     |
     */
-    'transport' => env('FEEDPLE_TRANSPORT', FeedpleSDK::DEFAULT_TRANSPORT),
+    'transport' => FeedpleSDK::getDefaultTransport(),
 
     /*
     |--------------------------------------------------------------------------

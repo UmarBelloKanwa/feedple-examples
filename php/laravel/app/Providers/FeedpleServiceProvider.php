@@ -88,7 +88,7 @@ class FeedpleServiceProvider extends ServiceProvider
 
         $selectedTransport = $transport
             ?? config('feedple.transport')
-            ?? env('FEEDPLE_TRANSPORT', FeedpleSDK::DEFAULT_TRANSPORT);
+            ?? FeedpleSDK::getDefaultTransport();
 
         return static::$cachedSdk = new FeedpleSDK(
             apiKey: $apiKey,
@@ -143,7 +143,7 @@ class FeedpleServiceProvider extends ServiceProvider
             return response()->json([
                 'status'     => 'active',
                 'service'    => 'Feedple Webhook Bridge',
-                'transport'  => config('feedple.transport') ?? env('FEEDPLE_TRANSPORT', FeedpleSDK::DEFAULT_TRANSPORT),
+                'transport'  => config('feedple.transport') ?? FeedpleSDK::getDefaultTransport(),
                 'configured' => $configured,
                 'secret_set' => $secretSet,
             ]);
@@ -174,7 +174,7 @@ class FeedpleSyncCommand extends Command
         $this->info('Starting Feedple schema synchronization...');
 
         try {
-            $sdk = FeedpleServiceProvider::makeSdk('webhook');
+            $sdk = FeedpleServiceProvider::makeSdk();
 
             if (!$sdk) {
                 $this->error('FEEDPLE_API_KEY is not configured in .env file.');
@@ -182,8 +182,16 @@ class FeedpleSyncCommand extends Command
             }
 
             $apiBaseUrl = config('feedple.api_base_url') ?? FeedpleSDK::getApiBaseUrl();
-            $this->line('<comment>Transport:</comment> Stateless HTTPS Webhook');
+            $transportMode = $sdk->getTransport();
+            $isLocalBackend = FeedpleSDK::isLocalUrl((string) $apiBaseUrl);
+            $this->line('<comment>Feedple Backend:</comment> ' . ($isLocalBackend ? 'Local dev server' : 'Feedple Cloud (production)'));
+            $this->line('<comment>Transport:</comment> ' . ucfirst($transportMode) . ($transportMode === 'websocket' ? ' (outbound worker)' : ' (inbound HTTP bridge)'));
             $this->line('<comment>API Endpoint:</comment> ' . rtrim($apiBaseUrl, '/') . '/tenants/schema');
+
+            $requested = strtolower((string) (getenv('FEEDPLE_TRANSPORT') ?: ($_ENV['FEEDPLE_TRANSPORT'] ?? '')));
+            if ($requested === 'webhook' && $transportMode === 'websocket') {
+                $this->warn('Notice: FEEDPLE_TRANSPORT=webhook was ignored — Feedple Cloud cannot reach a local APP_URL. Using WebSocket instead.');
+            }
 
             $force = (bool) $this->option('force');
             $customBridgeUrl = $this->option('bridge-url');
@@ -192,7 +200,7 @@ class FeedpleSyncCommand extends Command
             $bridgeUrl = null;
             if (!empty($customBridgeUrl)) {
                 $bridgeUrl = (string) $customBridgeUrl;
-            } else {
+            } elseif ($transportMode === 'webhook') {
                 $appUrl = config('app.url') ?? env('APP_URL', '');
                 $bridgePath = config('feedple.bridge_path') ?? env('FEEDPLE_BRIDGE_PATH', '/api/feedple/bridge');
                 if (!empty($appUrl) && filter_var($appUrl, FILTER_VALIDATE_URL)) {
@@ -202,13 +210,15 @@ class FeedpleSyncCommand extends Command
                     if ($isLocalApp && $isRemoteApi) {
                         $this->warn('Notice: APP_URL is local (' . $appUrl . ') and cannot receive webhooks from Feedple Cloud.');
                         $this->line('  → Syncing schema without registering local webhook URL.');
-                        $this->line('  → To test webhooks locally: use an HTTPS tunnel (e.g. ngrok: php artisan feedple:sync --bridge-url=https://xyz.ngrok-free.app/api/feedple/bridge)');
-                        $this->line('  → Or switch transport to WebSocket: FEEDPLE_TRANSPORT=websocket & php artisan feedple:start');
+                        $this->line('  → Tip: In development, Feedple defaults to WebSocket mode. Run: php artisan feedple:start');
                         $bridgeUrl = null;
                     } else {
                         $bridgeUrl = rtrim((string) $appUrl, '/') . '/' . ltrim((string) $bridgePath, '/');
                     }
                 }
+            } else {
+                $this->line('  → Transport is WebSocket: no webhook URL required.');
+                $this->line('  → Start the background worker daemon with: <comment>php artisan feedple:start</comment>');
             }
 
             if (!empty($bridgeUrl)) {
@@ -225,7 +235,7 @@ class FeedpleSyncCommand extends Command
                 $this->info("Schema synchronized successfully! Version: {$result['schema_version']} ({$result['tables_count']} tables) in {$elapsed}s.");
             }
 
-            if (!empty($result['registered_webhook_url'])) {
+            if (!empty($bridgeUrl) && !empty($result['registered_webhook_url'])) {
                 $this->line("<info>✓ Registered Webhook Bridge:</info> {$result['registered_webhook_url']}");
             }
 
@@ -366,7 +376,7 @@ class FeedpleStatusCommand extends Command
             $this->line("<comment>API Key:</comment> {$maskedKey}");
         }
 
-        $transport = config('feedple.transport') ?? env('FEEDPLE_TRANSPORT', 'webhook');
+        $transport = config('feedple.transport') ?? FeedpleSDK::getDefaultTransport();
         $this->line("<comment>Configured Transport:</comment> {$transport}");
 
         $defaultConn = config('database.default', env('DB_CONNECTION', 'sqlite'));
