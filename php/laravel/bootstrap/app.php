@@ -9,9 +9,6 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__.'/../routes/web.php',
         health: '/up',
     )
-    ->withProviders([
-        App\Providers\FeedpleServiceProvider::class,
-    ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
             'api/feedple/*',
