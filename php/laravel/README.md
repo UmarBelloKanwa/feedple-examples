@@ -40,6 +40,7 @@ FEEDPLE_API_KEY=fdpl_live_your_actual_api_key
 FEEDPLE_TRANSPORT=webhook
 FEEDPLE_BRIDGE_PATH=/api/feedple/bridge
 FEEDPLE_WIDGET_PUBLIC_KEY=wpk_your_widget_public_key
+FEEDPLE_VERIFY_SSL=true # Set to false if developing locally with self-signed certs or without CA bundle
 
 # Database (SQLite, MySQL, or PostgreSQL)
 DB_CONNECTION=sqlite
@@ -115,6 +116,9 @@ curl http://localhost:8000/api/feedple/bridge
 | `php artisan feedple:status` | Check the configuration, active transport mode, database connection, and recent logs. |
 | `php artisan feedple:start [--tail]` | Start the optional persistent WebSocket daemon (development mode only). |
 | `php artisan feedple:stop` | Stop the background WebSocket daemon process. |
+
+> [!TIP]
+> You can also run the SDK's standalone binary directly via `./vendor/bin/feedple` (e.g. `./vendor/bin/feedple status` or `./vendor/bin/feedple sync`), which will automatically bootstrap through Laravel's kernel.
 
 ---
 
